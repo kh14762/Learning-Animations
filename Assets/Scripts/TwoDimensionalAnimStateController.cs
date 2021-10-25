@@ -32,13 +32,14 @@ public class TwoDimensionalAnimStateController : MonoBehaviour
         bool forwardPressed = Input.GetKey(KeyCode.W);
         bool leftPressed = Input.GetKey(KeyCode.A);
         bool rightPressed = Input.GetKey(KeyCode.D);
+        bool backPressed = Input.GetKey(KeyCode.S);
         bool runPressed = Input.GetKey(KeyCode.LeftShift);
         //  Set current maxVelocity
         float currentMaxVelocity = runPressed ? maximunRunVelocity : maximunWalkVelocity;
 
         //  Handle changes in velocity
-        changeVelocity(forwardPressed, leftPressed, rightPressed, currentMaxVelocity);
-        lockOrResetVelocity(forwardPressed, leftPressed, rightPressed, runPressed, currentMaxVelocity);
+        changeVelocity(forwardPressed, leftPressed, rightPressed, backPressed, currentMaxVelocity);
+        lockOrResetVelocity(forwardPressed, leftPressed, rightPressed, backPressed, runPressed, currentMaxVelocity);
 
         //  Set parameters to local variable values
         animator.SetFloat(VelocityZHash, velocityZ);
@@ -46,7 +47,7 @@ public class TwoDimensionalAnimStateController : MonoBehaviour
     }
 
     // handles acceleration and deceleration
-    public void changeVelocity(bool forwardPressed, bool leftPressed, bool rightPressed, float currentMaxVelocity)
+    public void changeVelocity(bool forwardPressed, bool leftPressed, bool rightPressed, bool backPressed, float currentMaxVelocity)
     {
         //  if player presses forward, increase velocity in Z direction
         if (forwardPressed && velocityZ < currentMaxVelocity)
@@ -66,6 +67,12 @@ public class TwoDimensionalAnimStateController : MonoBehaviour
             velocityX += Time.deltaTime * acceleration;
         }
 
+        //  increase velocity in the back direction
+        if (backPressed && velocityZ > -currentMaxVelocity)
+        {
+            velocityZ -= Time.deltaTime * acceleration;
+        }
+
         //  decrease velocityZ
         if (!forwardPressed && velocityZ > 0.0f)
         {
@@ -83,16 +90,21 @@ public class TwoDimensionalAnimStateController : MonoBehaviour
         {
             velocityX -= Time.deltaTime * deceleration;
         }
+
+        if (!backPressed && velocityZ < 0.0f)
+        {
+            velocityZ += Time.deltaTime * deceleration;
+        }
     }
 
     //  handles reset and locking of velocity
-    public void lockOrResetVelocity(bool forwardPressed, bool leftPressed, bool rightPressed, bool runPressed, float currentMaxVelocity)
+    public void lockOrResetVelocity(bool forwardPressed, bool leftPressed, bool rightPressed, bool backPressed, bool runPressed, float currentMaxVelocity)
     {
         //  reset velocityZ
-        if (!forwardPressed && velocityZ < 0.0f)
-        {
-            velocityZ = 0.0f;
-        }
+        //if (!forwardPressed && velocityZ < 0.5f)
+        //{
+        //    velocityZ = 0.0f;
+        //}
 
         // if left or right is not pressed and velocityX does not equal zero
         // & velocityX is in the range of -0.05 and 0.05
@@ -102,29 +114,29 @@ public class TwoDimensionalAnimStateController : MonoBehaviour
         }
         //--------------------------------------forward-----------------------------//
         //  lock forward
-        if (forwardPressed && runPressed && velocityZ > currentMaxVelocity)
-        {
-            velocityZ = currentMaxVelocity;
-            //  decelerate to the mximum walk velocity
-        }
-        else if (forwardPressed && velocityZ > currentMaxVelocity)
-        {
-            velocityZ -= Time.deltaTime * deceleration;
-            //  round to currentMaxVelocity if within offset
-            if (velocityZ > currentMaxVelocity && velocityZ < (currentMaxVelocity + 0.05f))
-            {
-                velocityZ = currentMaxVelocity;
-            }
-            //  round to the currentMaxVelocity if within offset
-        }
-        else if (forwardPressed && velocityZ < currentMaxVelocity && velocityZ > (currentMaxVelocity - 0.05f))
-        {
-            velocityZ = currentMaxVelocity;
-        }
+        //if (forwardPressed && runPressed && velocityZ > currentMaxVelocity)
+        //{
+        //    velocityZ = currentMaxVelocity;
+        //    //  decelerate to the mximum walk velocity
+        //}
+        //else if (forwardPressed && velocityZ > currentMaxVelocity)
+        //{
+        //    velocityZ -= Time.deltaTime * deceleration;
+        //    //  round to currentMaxVelocity if within offset
+        //    if (velocityZ > currentMaxVelocity && velocityZ < (currentMaxVelocity + 0.05f))
+        //    {
+        //        velocityZ = currentMaxVelocity;
+        //    }
+        //    //  round to the currentMaxVelocity if within offset
+        //}
+        //else if (forwardPressed && velocityZ < currentMaxVelocity && velocityZ > (currentMaxVelocity - 0.05f))
+        //{
+        //    velocityZ = currentMaxVelocity;
+        //}
         //----------------------------------end forward-----------------------------//
         //--------------------------------------left--------------------------------//
         //  lock left
-        if (leftPressed && runPressed && velocityZ < -currentMaxVelocity)
+        if (leftPressed && runPressed && velocityX < -currentMaxVelocity)
         {
             velocityX = -currentMaxVelocity;
             //  decelerate to the mximum walk velocity
@@ -139,7 +151,7 @@ public class TwoDimensionalAnimStateController : MonoBehaviour
             }
             //  round to the currentMaxVelocity if within offset
         }
-        else if (leftPressed && velocityZ > -currentMaxVelocity && velocityX < (-currentMaxVelocity + 0.05f))
+        else if (leftPressed && velocityX > -currentMaxVelocity && velocityX < (-currentMaxVelocity + 0.05f))
         {
             velocityX = -currentMaxVelocity;
         }
@@ -166,5 +178,27 @@ public class TwoDimensionalAnimStateController : MonoBehaviour
             velocityX = currentMaxVelocity;
         }
         //----------------------------------end right-------------------------------//
+        //--------------------------------------back--------------------------------//
+        ////  lock back
+        //if (backPressed && runPressed && velocityZ < -currentMaxVelocity)
+        //{
+        //    velocityZ = -currentMaxVelocity;
+        //    //  decelerate to the maximum walk velocity
+        //}
+        //else if (backPressed && velocityZ < -currentMaxVelocity)
+        //{
+        //    velocityZ += Time.deltaTime * deceleration;
+        //    //  round to currentMaxVelocity if within offset
+        //    if (velocityZ > -currentMaxVelocity && velocityZ < (-currentMaxVelocity + 0.05f))
+        //    {
+        //        velocityZ = -currentMaxVelocity;
+        //    }
+        //    //  round to the currentMaxVelocity if within offset
+        //}
+        //else if (backPressed && velocityZ > -currentMaxVelocity && velocityZ < (-currentMaxVelocity + 0.05f))
+        //{
+        //    velocityZ = -currentMaxVelocity;
+        //}
+        //----------------------------------end back--------------------------------//
     }
 }
