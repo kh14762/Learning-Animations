@@ -22,29 +22,29 @@ public class AnimationStateController : MonoBehaviour
         bool isRunning = animator.GetBool(isRunningHash);
         bool isWalking = animator.GetBool(isWalkingHash);
         bool forwardPressed = Input.GetKey("w");
-        bool leftPressed = Input.GetKey("a");
-        bool rightPressed = Input.GetKey("d");
-        bool backPressed = Input.GetKey("s");
+        //bool leftPressed = Input.GetKey("a");
+        //bool rightPressed = Input.GetKey("d");
+        //bool backPressed = Input.GetKey("s");
         bool runPressed = Input.GetKey("left shift");
 
-        if ((forwardPressed || leftPressed || rightPressed || backPressed) && !isWalking)
+        if (forwardPressed  && !isWalking)
         {
             animator.SetBool(isWalkingHash, true);
         }
 
-        if ((!forwardPressed || !leftPressed || !rightPressed || !backPressed) && isWalking)
+        if (!forwardPressed && isWalking)
         {
             animator.SetBool(isWalkingHash, false);
         }
 
-        //if (!isRunning && (forwardPressed || leftPressed || rightPressed || backPressed && runPressed))
-        //{
-        //    animator.SetBool(isRunningHash, true);
-        //}
+        if (!isRunning && (forwardPressed && runPressed))
+        {
+            animator.SetBool(isRunningHash, true);
+        }
 
-        //if (isRunning && (!forwardPressed || !leftPressed || !rightPressed || !backPressed && !runPressed))
-        //{
-        //    animator.SetBool(isRunningHash, false);
-        //}
+        if (isRunning && (!forwardPressed && !runPressed))
+        {
+            animator.SetBool(isRunningHash, false);
+        }
     }
 }
