@@ -113,26 +113,26 @@ public class TwoDimensionalAnimStateController : MonoBehaviour
             velocityX = 0.0f;
         }
         //--------------------------------------forward-----------------------------//
-        //  lock forward
-        //if (forwardPressed && runPressed && velocityZ > currentMaxVelocity)
-        //{
-        //    velocityZ = currentMaxVelocity;
-        //    //  decelerate to the mximum walk velocity
-        //}
-        //else if (forwardPressed && velocityZ > currentMaxVelocity)
-        //{
-        //    velocityZ -= Time.deltaTime * deceleration;
-        //    //  round to currentMaxVelocity if within offset
-        //    if (velocityZ > currentMaxVelocity && velocityZ < (currentMaxVelocity + 0.05f))
-        //    {
-        //        velocityZ = currentMaxVelocity;
-        //    }
-        //    //  round to the currentMaxVelocity if within offset
-        //}
-        //else if (forwardPressed && velocityZ < currentMaxVelocity && velocityZ > (currentMaxVelocity - 0.05f))
-        //{
-        //    velocityZ = currentMaxVelocity;
-        //}
+        //lock forward
+        if (forwardPressed && runPressed && velocityZ > currentMaxVelocity)
+            {
+                velocityZ = currentMaxVelocity;
+                //  decelerate to the mximum walk velocity
+            }
+            else if (forwardPressed && velocityZ > currentMaxVelocity)
+            {
+                velocityZ -= Time.deltaTime * deceleration;
+                //  round to currentMaxVelocity if within offset
+                if (velocityZ > currentMaxVelocity && velocityZ < (currentMaxVelocity + 0.05f))
+                {
+                    velocityZ = currentMaxVelocity;
+                }
+                //  round to the currentMaxVelocity if within offset
+            }
+            else if (forwardPressed && velocityZ < currentMaxVelocity && velocityZ > (currentMaxVelocity - 0.05f))
+            {
+                velocityZ = currentMaxVelocity;
+            }
         //----------------------------------end forward-----------------------------//
         //--------------------------------------left--------------------------------//
         //  lock left
@@ -179,26 +179,26 @@ public class TwoDimensionalAnimStateController : MonoBehaviour
         }
         //----------------------------------end right-------------------------------//
         //--------------------------------------back--------------------------------//
-        ////  lock back
-        //if (backPressed && runPressed && velocityZ < -currentMaxVelocity)
-        //{
-        //    velocityZ = -currentMaxVelocity;
-        //    //  decelerate to the maximum walk velocity
-        //}
-        //else if (backPressed && velocityZ < -currentMaxVelocity)
-        //{
-        //    velocityZ += Time.deltaTime * deceleration;
-        //    //  round to currentMaxVelocity if within offset
-        //    if (velocityZ > -currentMaxVelocity && velocityZ < (-currentMaxVelocity + 0.05f))
-        //    {
-        //        velocityZ = -currentMaxVelocity;
-        //    }
-        //    //  round to the currentMaxVelocity if within offset
-        //}
-        //else if (backPressed && velocityZ > -currentMaxVelocity && velocityZ < (-currentMaxVelocity + 0.05f))
-        //{
-        //    velocityZ = -currentMaxVelocity;
-        //}
+        //  lock back
+        if (backPressed && runPressed && velocityZ < -currentMaxVelocity)
+        {
+            velocityZ = -currentMaxVelocity;
+            //  decelerate to the maximum walk velocity
+        }
+        else if (backPressed && velocityZ < -currentMaxVelocity)
+        {
+            velocityZ += Time.deltaTime * deceleration;
+            //  round to currentMaxVelocity if within offset
+            if (velocityZ > -currentMaxVelocity && velocityZ < (-currentMaxVelocity + 0.05f))
+            {
+                velocityZ = -currentMaxVelocity;
+            }
+            //  round to the currentMaxVelocity if within offset
+        }
+        else if (backPressed && velocityZ > -currentMaxVelocity && velocityZ < (-currentMaxVelocity + 0.05f))
+        {
+            velocityZ = -currentMaxVelocity;
+        }
         //----------------------------------end back--------------------------------//
     }
 }
